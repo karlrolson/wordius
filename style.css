@@ -1,0 +1,120 @@
+html, body, div, textarea, button, input {
+	font-family: 'Open Sans', sans-serif  !important;
+	font-size: 110%;
+	color: #000;
+	background: #fff;
+	-webkit-border-top-left-radius:5px;
+	-moz-border-radius-topleft:5px;
+	border-top-left-radius:5px;
+	-webkit-border-top-right-radius:5px;
+	-moz-border-radius-topright:5px;
+	border-top-right-radius:5px;
+	-webkit-border-bottom-right-radius:5px;
+	-moz-border-radius-bottomright:5px;
+	border-bottom-right-radius:5px;
+	-webkit-border-bottom-left-radius:5px;
+	-moz-border-radius-bottomleft:5px;
+	border-bottom-left-radius:5px;
+}
+
+h1, h2, h3, h4 {
+	display: block;
+	text-align: center;
+	padding: 0px;
+	margin: 0px;
+}
+
+h1 {
+	font-size: 170%;
+}
+h3 {
+	font-size: 130%;
+	font-weight: 300;
+}
+h4 {
+	font-size: 120%;
+}
+
+button{
+	color: #000;
+	background: #adf;
+	border: 2px solid #bef;
+	-webkit-transition: background 0.5s, color 0.5s;
+	transition: background 0.5s, color 0.5s;
+	margin: 5px 5px 5px 0px;
+
+}
+
+button:hover {
+	color: #fff;
+	background: #3bd;
+}
+
+a {
+	color: #3bd;
+	-webkit-transition: background 0.5s, color 0.5s;
+	transition: background 0.5s, color 0.5s;
+}
+
+a:hover {
+	color: #adf;
+}
+
+input{
+	color: #000;
+	background: #fff;
+	border: 2px solid #bef;
+}
+
+.leftBlock{
+	float: left;
+	display: block;
+	width: 100%;
+	font-size: 120%;
+}
+
+.leftBlock h4 {
+	font-size: 120%;
+	display: block;
+	text-align: center;
+}
+
+.toggleDiv{
+	float: left;
+	cursor: pointer;
+	padding: 2px;
+	width: 100%;
+	-webkit-transition: background 0.5s;
+	transition: background 0.5s;
+	margin: 0px 0px 5px;
+}
+
+.toggleDiv:hover{
+	background: #ddd;
+}
+
+.toggleDiv h4{
+	font-size: 120%;
+	display: inline;
+}
+
+.toggleDiv:hover:before{
+	content: '> ';
+}
+.toggleDiv:hover:after{
+	content: '(click to toggle)';
+}
+.keepIt100{
+	width: 100%;
+	margin-right: 10px;
+}
+.content{
+	padding: 5px;
+	font-size: 100%;
+}
+.textBox{
+	width: 100%;
+	height: 300px;
+	border: 2px solid #adf;
+	margin: 0px 0px 5px;
+}
