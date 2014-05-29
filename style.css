@@ -17,7 +17,7 @@ html, body, div, textarea, button, input {
 	border-bottom-left-radius:5px;
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5 {
 	display: block;
 	text-align: center;
 	padding: 0px;
@@ -33,6 +33,9 @@ h3 {
 }
 h4 {
 	font-size: 120%;
+}
+h5 {
+	font-size: 90%;
 }
 
 button{

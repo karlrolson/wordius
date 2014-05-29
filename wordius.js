@@ -25,6 +25,7 @@ $(document).ready(function(){
 		$('.leftBlock').toggle();
 		toggler('#main-section');
 		toggler('#control-section');
+		toggler('#topwords-section');
 	};
 	
 	
