@@ -1,0 +1,449 @@
+
+<!DOCTYPE html> 
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="Edge" />
+<meta charset="UTF-8">
+<title>Lyricalist by Karl Olson</title>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
+<style type="text/css">
+html, body, div, textarea, button, input {
+	font-family: 'Open Sans', sans-serif  !important;
+	font-size: 100%;
+	-webkit-border-top-left-radius:5px;
+	-moz-border-radius-topleft:5px;
+	border-top-left-radius:5px;
+	-webkit-border-top-right-radius:5px;
+	-moz-border-radius-topright:5px;
+	border-top-right-radius:5px;
+	-webkit-border-bottom-right-radius:5px;
+	-moz-border-radius-bottomright:5px;
+	border-bottom-right-radius:5px;
+	-webkit-border-bottom-left-radius:5px;
+	-moz-border-radius-bottomleft:5px;
+	border-bottom-left-radius:5px;
+}
+
+body{
+	animation: fade-in 2s;
+}
+
+h1, h2, h3, h4 {
+	display: block;
+	text-align: center;
+	padding: 0px;
+	margin: 0px;
+}
+
+h1 {
+	font-size: 160%;
+}
+h3 {
+	font-size: 135%;
+	font-weight: 300;
+}
+h4 {
+	font-size: 120%;
+}
+
+button{
+	color: #000;
+	background: #adf;
+	border: 2px solid #bef;
+	-webkit-transition: background 0.5s, color 0.5s;
+	transition: background 0.5s, color 0.5s;
+
+}
+
+button:hover {
+	color: #fff;
+	background: #3bd;
+}
+
+input{
+	color: #000;
+	background: #fff;
+	border: 2px solid #bef;
+}
+
+.leftBlock{
+	float: left;
+	display: block;
+	width: 100%;
+	font-size: 120%;
+}
+
+.leftBlock h4 {
+	font-size: 120%;
+	display: block;
+	text-align: center;
+}
+
+.toggleDiv{
+	float: left;
+	cursor: pointer;
+	padding: 2px;
+	width: 100%;
+	-webkit-transition: background 0.5s;
+	transition: background 0.5s;
+	margin: 0px 0px 5px;
+}
+
+.toggleDiv:hover{
+	background: #ddd;
+}
+
+.toggleDiv h4{
+	font-size: 120%;
+	display: inline;
+}
+
+.toggleDiv:hover:before{
+	content: '> ';
+}
+.toggleDiv:hover:after{
+	content: '(click to toggle)';
+}
+.keepIt100{
+	width: 100%;
+	margin-right: 10px;
+}
+.content{
+	padding: 5px;
+	font-size: 100%;
+}
+.textBox{
+	width: 100%;
+	height: 300px;
+	border: 2px solid #adf;
+	margin: 0px 0px 5px;
+}
+@-webkit-keyframes fade-in
+{
+from {opacity: 0.0; background: #000;}
+to {opacity: 2.0; background: #FFF;}
+}
+@keyframes fade-in
+{
+from {opacity: 0.0; background: #000;}
+to {opacity: 2.0; background: #FFF;}
+}
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="Chart.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var resultSets = {
+			labels: [],
+			datasets: [
+				{
+					fillColor: "rgba(0,110,220,0.5)",
+					strokeColor: "rgba(0,110,220,1)",
+					data: []
+				}
+				]
+		};
+		
+	var currentResults = {
+		name: '',
+		count: ''
+	};
+	
+	
+
+	function toggler(targetSection){
+		$(targetSection).slideToggle(500);	
+	}
+	
+	function loadView(){
+		$('.leftBlock').toggle();
+		toggler('#main-section');
+		toggler('#control-section');
+	};
+	
+	
+	function analyzeText() {
+		var str = $("#textInput").val();
+		var excluded = $('#textExclude').val();
+		if (str.length > 0){
+		
+			if ($('#removeSingleQuotes').is(':checked')){
+				str = str.replace(/'/gm, '');
+				excluded = excluded.replace(/'/gm, '');
+			}
+			
+			if ($('#removeDashes').is(':checked')){
+				str = str.replace(/-/gm, ' ').replace(/  +/g, ' ');
+				excluded = excluded.replace(/-/gm, ' ').replace(/  +/g, ' ');
+			}
+			
+			if ($('#removeEverything').is(':checked')){
+				str = str.replace(/[&\/\\#,—_=+()()$~%\.":;*?!<>{}]/gm, ' ').replace(/(\r\n|\n|\r)/gm, " ").replace(/  +/g, ' ');
+				excluded = excluded.replace(/[&\/\\#,—_=+()()$~%\.":;*?!<>{}]/gm, ' ').replace(/(\r\n|\n|\r)/gm, " ").replace(/  +/g, ' ');
+			}
+			
+			if ($('#toLowerCase').is(':checked')){
+				str = str.toLowerCase();
+				excluded = excluded.toLowerCase();
+			}
+			
+			var excludedArray = excluded.split(" ");
+			
+			var totalWordCount = str.split(" ").length;
+				
+			var split = str.split(" "),
+				obj = {};
+			var count = 0;
+			var excludedCount = 0;
+			var inputLength = split.length;
+			var userLength = parseInt($("#maxWords").val());
+
+			if  (((inputLength < userLength) == false) && (isNaN(userLength) == false)){
+				inputLength = userLength;
+			}
+			
+			// make the basic JSON Object
+			for (var x = 0; x < inputLength; x++) {
+				if ((split[x] != '') && (excludedArray.indexOf(split[x]) < 0)) {
+					if (obj[split[x]] === undefined) {
+						obj[split[x]] = 1;
+						count++;
+					} else {
+						obj[split[x]]++;
+					}
+				}
+				else{
+					excludedCount++;
+				}
+			}
+			
+			var nameCountJSON = [];
+			var labels = [];
+			var dataset = [];
+		
+			
+			//make the {word: "", count: ""} array JSON from our existing object 
+			for (var key in obj){
+				nameCountJSON.push({word: key, count: obj[key]});
+			}
+			
+			//sort the JSON Object:
+			function compare(a,b) {
+				if (a.count > b.count)
+					return -1;
+				if (a.count < b.count)
+					return 1;
+				return 0;
+			};
+			
+			nameCountJSON.sort(compare);
+			
+			//make the chart data from nameCountJSON
+			for (var i = 0; i < nameCountJSON.length; i++){
+				labels.push(nameCountJSON[i].word);
+				dataset.push(nameCountJSON[i].count);
+			}
+			
+			var topWords = 20 > count ? count : 20;
+			
+			
+			//chart data object made from our sorted set up
+			var chartData = {
+				labels: labels.slice(0, topWords),
+				datasets: [
+					{
+						fillColor: "rgba(0,110,220,0.5)",
+						strokeColor: "rgba(0,110,220,1)",
+						data: dataset.slice(0, topWords)
+					}
+					]
+			};
+			
+			//chart stuff
+			//dynamic canvas size based on window.
+			var chartWidth = $(window).innerWidth() - 50;
+			$("#wordChartContainer").html('<canvas id="wordChart" width="' 
+				+ chartWidth + '" height="400"></canvas>');
+			$("#wordChartContainer")
+			
+			var ctx = $("#wordChart").get(0).getContext("2d");
+			var chartOptions = {
+				scaleOverride : true,
+				scaleSteps : 10,
+				scaleStepWidth : dataset[0]/10,
+				scaleStartValue : 0,
+				scaleFontFamily : "'Open Sans'", 
+			};
+			var wordChart = new Chart(ctx).Bar(chartData, chartOptions);
+
+			
+			$('#resultSummary').html("Total Unique Words: " + count 
+				+ "<br />Total Word Count: " + totalWordCount 
+				+ "<br />Total Word Processed: " + inputLength 
+				+ "<br />Excluded Word Count: " + excludedCount 
+				+ "<br />Total Words - Excluded Words: " + (totalWordCount-excludedCount)
+				+ "<br />Precentage of Unique Vocabulary: " 
+				+ ((count/totalWordCount)*100).toPrecision(8) + '%'
+				+ "<br />Precentage of Unique Vocabulary Minus Exclusions: " 
+				+ ((count/(totalWordCount-excludedCount))*100).toPrecision(8) + '%<br /><br />'
+				);
+				
+
+			$('#resultJSON').html(JSON.stringify(obj));
+			$('#resultJSONWord').html(JSON.stringify(nameCountJSON));
+			$('#processedInput').html(str);
+			$('#resultCSV').html(labels.toString(' '));
+			
+			currentResults.name = $("#resultSetName").val();
+			currentResults.count = count;
+		}
+	}
+	
+	function saveResults() {
+		resultSets.labels.push(currentResults.name);
+		resultSets.datasets[0].data.push(currentResults.count);
+		var chartWidth = $(window).innerWidth() - 50;
+		$("#sampleChartContainer").html('<canvas id="resultChart" width="' 
+			+ chartWidth + '" height="400"></canvas>');
+		
+		
+		
+		//min max behavior of graph
+		var sortedResults = [];
+		for (var i = 0; i < resultSets.datasets[0].data.length; i++){
+			sortedResults.push(resultSets.datasets[0].data[i]);
+		}
+		sortedResults.sort().reverse();
+		
+		var ctx = $("#resultChart").get(0).getContext("2d");
+		var chartOptions = {
+			scaleOverride : true,
+			scaleSteps : 10,
+			scaleStepWidth : sortedResults[0]/10,
+			scaleStartValue : 0,
+			scaleFontFamily : "'Open Sans'", 
+		};
+		var resultChart = new Chart(ctx).Bar(resultSets, chartOptions);
+	}
+
+	$('#check').click(function (){analyzeText()});
+	$('#save').click(function (){
+		analyzeText();
+		saveResults();
+	});
+	
+	$('#mainToggle').click(function(){
+		toggler("#main-section");
+	});
+	$('#excludeToggle').click(function(){
+		toggler("#exclude-section");
+	});
+	$('#jsonlistToggle').click(function(){
+		toggler("#jsonlist-section");
+	});
+	$('#processedToggle').click(function(){
+		toggler("#processed-section");
+	});
+	$('#jsonobjectToggle').click(function(){
+		toggler("#jsonobject-section");
+	});
+	$('#csvToggle').click(function(){
+		toggler("#csv-section");
+	});
+	$('#topwordsToggle').click(function(){
+		toggler("#topwords-section");
+	});
+	$('#resultsToggle').click(function(){
+		toggler("#results-section");
+	});
+	
+	
+	loadView();
+	analyzeText();
+});
+</script>
+</head>
+<body>
+	<div class="content">
+		<div class="keepIt100">
+			<h1>
+				Lyricalist v.0.4.5
+			<h1>
+			<h3>
+				A case-corrected, punctuation-omitting word count for text analysis. </br>
+				Also includes word filtering in case you want omit words that are commonly used.
+			</h3>
+			<div class="toggleDiv" id="mainToggle">
+				<h4>Text To Check</h4>
+			</div>
+			<div class="leftBlock" id="main-section">
+				<textarea class="textBox" id="textInput"></textarea>
+			</div>
+			<div class="toggleDiv" id="excludeToggle">
+				<h4>Words To Exclude</h4>
+			</div>
+			<div class="leftBlock" id="exclude-section">
+				<textarea class="textBox" id="textExclude"></textarea>
+			</div>
+			<div class="toggleDiv" id="jsonlistToggle">
+				<h4>WordList As JSON</h4>
+			</div>
+			<div class="leftBlock" id="jsonlist-section">
+				<textarea class="textBox" id="resultJSON"></textarea>
+			</div>
+			<div class="toggleDiv" id="processedToggle">
+				<h4>Processed Input</h4>
+			</div>
+			<div class="leftBlock" id="processed-section">
+				<textarea class="textBox" id="processedInput"></textarea>
+			</div>
+			<div class="toggleDiv" id="jsonobjectToggle">
+				<h4>WordList As JSON {word: "", count""} Format</h4>
+			</div>
+			<div class="leftBlock" id="jsonobject-section">
+				<textarea class="textBox" id="resultJSONWord"></textarea>
+			</div>
+			<div class="toggleDiv" id="csvToggle">
+				<h4>WordList CSV</h4>
+			</div>
+			<div class="leftBlock" id="csv-section">
+				<textarea class="textBox" id="resultCSV"></textarea>
+			</div>
+			<div class="toggleDiv" id="topwordsToggle">
+				<h4>Most Used Words In The Current Sample</h4>
+			</div>
+			<div class="leftBlock" id="topwords-section">
+				<div id="wordChartContainer"></div>
+			</div>
+			<div class="toggleDiv" id="resultsToggle">
+				<h4>Results of Saved Samples</h4>
+			</div>
+			<div class="leftBlock" id="results-section">
+				<div id="sampleChartContainer"></div>
+			</div>
+			<div class="leftBlock" id="control-section">
+				Notes: If you don't enable lowercase and common formatting removal, 
+				you're going to get large, hard to compare unique counts. Similarly, 
+				removing dashes and apostrophes may artificially deflate your unique counts.
+				<br />
+				<input type="checkbox" id="removeSingleQuotes" />Remove Apostrophes<br />
+				<input type="checkbox" id="removeDashes" />Remove Dashes<br />
+				<input type="checkbox" id="removeEverything" />Remove Other Common Formatting &amp Symbols<br />
+				<input type="checkbox" id="toLowerCase" />Make Input All Lowercase<br /><br />
+				Maximum Number of Words to Count:  <br />
+				<input type="text" style="width: 100px;" id="maxWords" value="35000"/> <br />
+				Name For Result Set:  <br />
+				<input type="text" style="width: 150px;" id="resultSetName" value="Some Results"/> <br />
+				<br />
+				<div id="resultSummary"></div>
+				<button id='check'>Count Words!</button>  <button id='save'>Save Results</button>
+				<br />
+			</div>
+			
+			<h4>
+			Copyright 2014 <a href="http://karlrolson.com/">Karl Olson.</a> 
+			</h4>
+		</div>
+	</div>
+</body>
+</html>
