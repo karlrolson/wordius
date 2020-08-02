@@ -4,18 +4,18 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="Edge" />
 <meta charset="UTF-8">
-<title>wordi.us</title>
+<title>wordius</title>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="style.css">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 <script src="wordius.js"></script>
 </head>
 <body>
 	<div class="content">
 		<div class="keepIt100">
 			<h1>
-				wordi.us
+				wordius
 			<h1>
 			<h3>
 				A case-corrected, punctuation-omitting word count for text analysis. </br>
@@ -73,22 +73,22 @@
 				Notes: If you don't enable lowercase and common formatting removal, 
 				you're going to get large, hard to compare unique counts. Similarly, 
 				removing dashes and apostrophes may artificially deflate your unique counts.
-				<br />
+				<br /><br />
 				<input type="checkbox" id="removeSingleQuotes" />Remove Apostrophes<br />
 				<input type="checkbox" id="removeDashes" />Remove Dashes<br />
 				<input type="checkbox" id="removeEverything" />Remove Other Common Formatting &amp Symbols<br />
 				<input type="checkbox" id="toLowerCase" />Make Input All Lowercase<br /><br />
 				Maximum Number of Words to Count:  <br />
-				<input type="text" style="width: 100px;" id="maxWords" value="35000"/> <br />
+				<input type="text" style="width: 100%;" id="maxWords" value="35000"/> <br />
 				Name For Result Set:  <br />
-				<input type="text" style="width: 150px;" id="resultSetName" value="Some Results"/> <br />
+				<input type="text" style="width: 100%;" id="resultSetName" value="Some Results"/> <br />
 				<br />
 				<div id="resultSummary"></div>
 				<button id='check'>Count Words!</button>  <button id='save'>Save Results</button>
 				<br />
 			</div>
 			
-			<h4>v.0.4.5 Copyright 2014 <a target="_blank" href="http://karlrolson.com/">Karl Olson.</a></h4>
+			<h4>v.0.5.0 Copyright 2014 <a target="_blank" href="http://karlrolson.com/">Karl Olson.</a></h4>
 			<h5>Open Source Under The MIT License</h5>
 			<h5>Download And Contribute To The Source At <a target="_blank" href="https://github.com/karlrolson/wordius">GitHub</a></h5>
 		</div>
